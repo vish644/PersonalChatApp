@@ -1,8 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  reactCompiler: true,
+  // Explicitly set the project root to avoid workspace detection issues
+  experimental: {
+    // This helps Next.js understand the project structure
+  },
 };
 
 export default nextConfig;

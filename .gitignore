@@ -1,0 +1,50 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+backend/.env
+web/.env.local
+mobile/.env.local
+
+# Build outputs
+.next/
+dist/
+build/
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Expo
+.expo/
+.expo-shared/
+mobile/.expo/
+
+# MongoDB
+*.db
+*.sqlite
+
+# Redis
+dump.rdb
+
+# Backup files
+*.backup
+*.bak
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
