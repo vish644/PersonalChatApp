@@ -41,7 +41,7 @@ export const importKey = async (keyString: string): Promise<string> =>
 // Encrypt plaintext with AES-256-CBC. Returns hex string: ivHex:cipherHex
 export const encrypt = async (
   text: string,
-  keyHex: string
+  keyHex: string,
 ): Promise<string> => {
   const key = hexToWordArray(keyHex);
   const ivBytes = (
@@ -66,7 +66,7 @@ export const encrypt = async (
 function decryptXORBase64(encryptedBase64: string, keyHex: string): string {
   try {
     const combined = Uint8Array.from(atob(encryptedBase64), (c) =>
-      c.charCodeAt(0)
+      c.charCodeAt(0),
     );
     const LEGACY_IV = 12; // legacy IV size used by old XOR scheme
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -94,7 +94,7 @@ function decryptXORBase64(encryptedBase64: string, keyHex: string): string {
 // Decrypt: try AES-CBC (new), AES-GCM (legacy server), XOR+base64 (old clients)
 export const decrypt = async (
   encryptedData: string,
-  keyHex: string
+  keyHex: string,
 ): Promise<string> => {
   try {
     if (!encryptedData) throw new Error("No encrypted data provided");
@@ -164,8 +164,12 @@ export const decrypt = async (
           padding: CryptoJS.pad.Pkcs7,
         });
 
-        const text = decrypted.toString(CryptoJS.enc.Utf8);
-        if (text) return text;
+        try {
+          const text = decrypted.toString(CryptoJS.enc.Utf8);
+          if (text) return text;
+        } catch (utf8Err) {
+          // Malformed UTF-8 means this format/key did not match, fall through to next fallback.
+        }
       }
     }
 
@@ -194,13 +198,13 @@ export const decrypt = async (
             keyBytes,
             { name: "AES-GCM" },
             false,
-            ["decrypt"]
+            ["decrypt"],
           );
 
           const decrypted = await subtle.decrypt(
             { name: "AES-GCM", iv },
             cryptoKey,
-            cipherWithTag
+            cipherWithTag,
           );
 
           const decoder = new TextDecoder();
