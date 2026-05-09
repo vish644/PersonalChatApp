@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL ||
+  "https://personalchatapp-1.onrender.com/api";
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -57,14 +59,18 @@ api.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 export const authAPI = {
   register: (email: string, password: string, name?: string) =>
     api.post("/auth/register", { email, password, name }),
-  login: (email: string, password: string, deviceType?: string, deviceName?: string) =>
-    api.post("/auth/login", { email, password, deviceType, deviceName }),
+  login: (
+    email: string,
+    password: string,
+    deviceType?: string,
+    deviceName?: string,
+  ) => api.post("/auth/login", { email, password, deviceType, deviceName }),
   refreshToken: (data: { refreshToken: string }) =>
     api.post("/auth/refresh", data),
   getQRToken: () => api.get("/auth/qr-token"),
@@ -81,4 +87,3 @@ export const messageAPI = {
 };
 
 export default api;
-

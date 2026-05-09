@@ -7,12 +7,16 @@ export const connectSocket = (token: string): Socket => {
     return socket;
   }
 
-  socket = io(process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:5000", {
-    auth: {
-      token,
+  socket = io(
+    process.env.NEXT_PUBLIC_SOCKET_URL ||
+      "https://personalchatapp-1.onrender.com",
+    {
+      auth: {
+        token,
+      },
+      transports: ["websocket", "polling"],
     },
-    transports: ["websocket", "polling"],
-  });
+  );
 
   socket.on("connect", () => {
     console.log("✅ Socket connected");
@@ -39,4 +43,3 @@ export const disconnectSocket = () => {
 export const getSocket = (): Socket | null => {
   return socket;
 };
-

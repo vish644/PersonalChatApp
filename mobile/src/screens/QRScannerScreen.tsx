@@ -58,7 +58,7 @@ export default function QRScannerScreen() {
       const response = await authAPI.validateQRToken(
         qrToken,
         "mobile",
-        "Mobile Device"
+        "Mobile Device",
       );
 
       console.log("✅ Token validated successfully");
@@ -92,7 +92,7 @@ export default function QRScannerScreen() {
       let errorMessage = "Failed to login";
 
       if (error.isNetworkError || error.message === "NETWORK_ERROR") {
-        errorMessage = `Network error - Cannot connect to backend.\n\nPlease check:\n1. Backend is running\n2. API URL is correct in mobile/src/config/api.ts\n3. Device and computer are on same WiFi\n4. Firewall allows port 5000`;
+        errorMessage = `Network error - Cannot connect to backend.\n\nPlease check:\n1. Backend is running\n2. API URL is correct in mobile/src/config/api.ts\n3. Device has internet access`;
       } else if (error.response?.data?.error) {
         errorMessage = error.response.data.error;
       } else if (error.message) {
